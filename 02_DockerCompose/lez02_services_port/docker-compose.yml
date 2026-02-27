@@ -1,0 +1,10 @@
+services:
+  webserverjava:
+    image: tomcat:latest
+    ports:
+      - "8010:8080"
+
+  webserver:
+    image: nginx:latest
+    ports:
+      - "8009:80"

@@ -1,0 +1,7 @@
+# Un servizio è un elenco di container.
+services:
+  applicationserver:
+    image: tomcat:latest
+  
+  webserver:
+    image: nginx:latest

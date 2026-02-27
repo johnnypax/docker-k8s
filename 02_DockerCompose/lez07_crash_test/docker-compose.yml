@@ -1,0 +1,6 @@
+services:
+  crash-demo:
+    image: ubuntu
+    command: sh -c "echo Lavorando... && sleep 5 && exit 1"
+    #restart: any         # ATTENZIONE
+    restart: on-failure:3

@@ -1,0 +1,9 @@
+services:
+  webserverjava:
+    image: tomcat:latest
+    ports:
+      - "8010:8080"
+
+  test:
+    image: alpine
+    command: ping webserverjava
