@@ -3,6 +3,8 @@ services:
     image: tomcat:latest
     networks:
     - app_net
+    volumes:
+      - ./tomcat-root:/usr/local/tomcat/webapps/ROOT:ro
 
   proxy:
     image: nginx:latest
