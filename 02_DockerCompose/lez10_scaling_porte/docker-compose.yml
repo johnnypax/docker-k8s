@@ -1,0 +1,5 @@
+services:
+  webs:
+    image: tomcat:latest
+    ports:
+      - "8080:8080"       # PROBLEMA quando scaliamo!

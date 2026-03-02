@@ -1,0 +1,12 @@
+services:
+  webs:
+    image: tomcat:latest
+
+  revp:
+    image: nginx:latest
+
+# docker compose up -d --scale tomcat=3
+# docker compose exec tomcat sh -----> Entra in una replica a caso
+# docker compose exec tomcat sh -lc "hostname"
+
+# docker exec -it <nome_container> sh -lc "hostname"
