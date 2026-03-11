@@ -1,0 +1,18 @@
+stages:
+  - build
+  - test
+
+build_jar:
+  stage: build
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -q -Dskiptests package
+  artifacts:
+    paths:
+      - "target/*.jar"
+
+test_jar:
+  stage: test
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -B test

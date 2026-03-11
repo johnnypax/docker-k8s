@@ -1,0 +1,45 @@
+stages:
+  - build
+  - test
+  - deploy
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+build_jar:
+  stage: build
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -q -Dskiptests package
+  artifacts:
+    paths:
+      - "target/*.jar"
+
+test_jar:
+  stage: test
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -B test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+docker_push:
+  stage: deploy
+  image: docker:27
+  services:
+    - name: docker:27-dind
+      command: ["--mtu=1460"]
+  dependencies:
+    - build_jar
+  script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+    - docker build -t "$DOCKER_IMAGE:latest" -t "$DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$DOCKER_IMAGE:latest"
+    - docker push "$DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

@@ -1,0 +1,42 @@
+stages:
+  - build
+  - test
+  # - security
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+build_jar:
+  stage: build
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -q -Dskiptests package
+  artifacts:
+    paths:
+      - "target/*.jar"
+
+test_jar:
+  stage: test
+  image: maven:3.9.12-eclipse-temurin-17
+  script:
+    - mvn -B test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+
+# sast_semgrep:
+#   stage: security
+#   image: semgrep/semgrep:latest
+#   script:
+#     - semgrep --config p/java --config p/spring --config p/security-audit . || true
+#     - semgrep --config p/java --config p/spring --config p/security-audit --sarif --output gl-sast-report.sarif . || true
+#   artifacts:
+#     when: always
+#     reports:
+#       sast: gl-sast-report.sarif
+#     paths:
+#       - gl-sast-report.sarif
+#   allow_failure: true

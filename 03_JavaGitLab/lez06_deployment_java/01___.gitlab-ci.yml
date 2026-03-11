@@ -1,0 +1,10 @@
+stages:
+  - build
+
+hello:
+  stage: build
+  image: alpine:3.20
+  script:
+    - 'echo "Ciao Giovanni"'
+    - 'echo "Branch: $CI_COMMIT_BRANCH"'
+    - 'echo "Commit: $CI_COMMIT_SHORT_SHA"'
