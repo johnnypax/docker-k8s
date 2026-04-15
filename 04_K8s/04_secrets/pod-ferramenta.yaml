@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-ferramenta
+  namespace: lez03-secrets
+spec:
+  containers: 
+    - name: container-ferramenta
+      image: busybox:latest
+      command: ["sh", "-c", "echo Username: $DB_USERNAME && echo Password: $DB_PASSWORD && sleep 3600"]
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "100m"
+        limits:
+          memory: "128Mi"
+          cpu: "200m"
+      env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
