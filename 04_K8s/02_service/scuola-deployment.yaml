@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scuola-deployment
+  namespace: lez01-intro
+spec:
+  replicas: 5                # Replica Set: 3 repliche del pod
+  selector:
+    matchLabels:
+      app: scuola-pod
+  template:
+    metadata:
+      labels:
+        app: scuola-pod
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

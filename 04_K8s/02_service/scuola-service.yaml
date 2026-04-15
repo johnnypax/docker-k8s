@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scuola-service
+  namespace: lez01-intro
+spec:
+  selector:
+    app: scuola-pod     # Seleziona i pod con l'etichetta "app: scuola-pod"
+  ports:
+  - port: 80              # Porta del servizio
+    targetPort: 80        # Porta del container nei pod selezionati
+    protocol: TCP         # Protocollo (TCP, UDP)
+    nodePort: 30080       # Porta esposta sui nodi (per NodePort)
+  type: NodePort         # Tipo di servizio (ClusterIP, NodePort, LoadBalancer)

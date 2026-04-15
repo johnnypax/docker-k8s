@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esempio-deployment-students
+  namespace: lez01-intro
+spec:
+  replicas: 5                # Replica Set: 3 repliche del pod
+  selector:
+    matchLabels:
+      app: scuola-app
+  template:
+    metadata:
+      labels:
+        app: scuola-app
+    spec:
+      containers:
+      - name: student-container
+        image: archety/student-api-in-memory:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
