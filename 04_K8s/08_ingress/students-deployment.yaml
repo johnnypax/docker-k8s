@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: students-deployment
+  namespace: school-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: students-api
+  template:
+    metadata:
+      labels:
+        app: students-api
+    spec:
+      containers:
+        - name: students-api
+          image: archety/student-api-in-memory:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 500m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  namespace: lez04-probes
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: stud-app
+  template:
+    metadata:
+      labels:
+        app: stud-app
+    spec:
+      containers:
+      - name: stud-app
+        image: archety/student-api-in-memory:latest
+
+        # Considero il pod pronto se risponde con successo alla chiamata HTTP GET su /actuator/health
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+
+        # Considero il pod vivo se risponde con successo alla chiamata HTTP GET su /actuator/health
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          failureThreshold: 3
+
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests:
+            memory: "64Mi"  
+            cpu: "250m"
+        ports:
+        - containerPort: 8080
